@@ -12,6 +12,8 @@ import org.hibernate.validator.constraints.br.CNPJ;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchoolDTO {
+    private Long id;
+
     @NotBlank(message = "O campo 'name' é obrigatório")
     private String name;
 
