@@ -1,13 +1,16 @@
-package com.platformbuilders.controleescolar.service;
+package com.platformbuilders.controleescolar.school.service;
 
-import com.platformbuilders.controleescolar.api.dto.SchoolDTO;
-import com.platformbuilders.controleescolar.domain.model.School;
-import com.platformbuilders.controleescolar.infra.repository.SchoolRepository;
+import com.platformbuilders.controleescolar.school.api.dto.SchoolDTO;
+import com.platformbuilders.controleescolar.school.domain.model.School;
+import com.platformbuilders.controleescolar.school.infra.repository.SchoolRepository;
 import com.platformbuilders.controleescolar.school.exception.SchoolCnpjAlreadyExistsException;
 import com.platformbuilders.controleescolar.school.exception.SchoolNotFoundException;
+import com.platformbuilders.controleescolar.student.api.dto.StudentDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,11 +48,8 @@ public class SchoolService {
         return modelMapper.map(school, SchoolDTO.class);
     }
 
-    public List<SchoolDTO> findAll() {
-
-        return schoolRepository.findAll().stream()
-                .map(school -> modelMapper.map(school, SchoolDTO.class))
-                .collect(Collectors.toList());
+    public Page<SchoolDTO> findAll(Pageable pageable) {
+        return schoolRepository.findAll(pageable).map(school -> modelMapper.map(school, SchoolDTO.class));
     }
 
     public SchoolDTO update(Long id, SchoolDTO schoolDTO) {

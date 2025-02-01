@@ -1,6 +1,6 @@
-package com.platformbuilders.controleescolar.infra.repository;
+package com.platformbuilders.controleescolar.school.infra.repository;
 
-import com.platformbuilders.controleescolar.domain.model.School;
+import com.platformbuilders.controleescolar.school.domain.model.School;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
