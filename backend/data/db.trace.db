@@ -1,0 +1,12 @@
+2025-01-28 22:10:32.201004-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SCHOOLS" not found (this database is empty); SQL statement:
+select s1_0.id,s1_0.address,s1_0.cnpj,s1_0.name,s1_0.phone,s1_0.students_per_classroom from schools s1_0 [42104-232]
+2025-01-28 22:10:33.262037-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SCHOOLS" not found (this database is empty); SQL statement:
+select s1_0.id,s1_0.address,s1_0.cnpj,s1_0.name,s1_0.phone,s1_0.students_per_classroom from schools s1_0 [42104-232]
+2025-01-28 22:10:34.495288-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SCHOOLS" not found (this database is empty); SQL statement:
+select s1_0.id,s1_0.address,s1_0.cnpj,s1_0.name,s1_0.phone,s1_0.students_per_classroom from schools s1_0 [42104-232]
+2025-01-28 22:10:48.781505-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SCHOOLS" not found (this database is empty); SQL statement:
+select s1_0.id from schools s1_0 where s1_0.cnpj=? fetch first ? rows only [42104-232]
