@@ -42,6 +42,7 @@ public class StudentAccessService {
         StudentAccess access = new StudentAccess();
         access.setStudent(student);
         access.setEntryTime(LocalDateTime.now());
+        log.info("Student {} entry registered at {}", studentId, LocalDateTime.now());
 
         StudentAccess savedAccess = accessRepository.save(access);
         return modelMapper.map(savedAccess, StudentAccessDTO.class);
@@ -57,11 +58,12 @@ public class StudentAccessService {
                 .orElseGet(() -> {
                     StudentAccess newAccess = new StudentAccess();
                     newAccess.setStudent(student);
+                    newAccess.setEntryTime(LocalDateTime.now());
                     return newAccess;
                 });
 
         access.setExitTime(LocalDateTime.now());
-
+        log.info("Student {} exit registered at {}", studentId, LocalDateTime.now());
         StudentAccess savedAccess = accessRepository.save(access);
         return modelMapper.map(savedAccess, StudentAccessDTO.class);
     }

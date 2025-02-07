@@ -11,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "students")
 @Data
@@ -49,7 +47,6 @@ public class Student {
     @NotBlank(message = "O campo 'guardian_name' é obrigatório")
     @Column(name = "guardian_name", nullable = false)
     private String guardianName;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)

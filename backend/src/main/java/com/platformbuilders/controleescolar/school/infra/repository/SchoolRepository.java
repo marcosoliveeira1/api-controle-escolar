@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface SchoolRepository extends JpaRepository<School, Long> {
     Optional<School> findByCnpj(String cnpj);
+
     boolean existsByCnpj(String cnpj);
 }

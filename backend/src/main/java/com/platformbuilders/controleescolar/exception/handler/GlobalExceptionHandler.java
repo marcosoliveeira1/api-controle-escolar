@@ -65,6 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleAllUncaughtException(Exception ex) {
+        log.error("Erro inesperado", ex);
         return new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "INTERNAL_SERVER_ERROR",

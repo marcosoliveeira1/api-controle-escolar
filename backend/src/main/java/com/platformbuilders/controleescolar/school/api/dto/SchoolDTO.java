@@ -1,9 +1,10 @@
 package com.platformbuilders.controleescolar.school.api.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -11,6 +12,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SchoolDTO {
     private Long id;
 

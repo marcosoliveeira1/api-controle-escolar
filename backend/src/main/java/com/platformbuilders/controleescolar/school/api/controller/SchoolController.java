@@ -2,7 +2,6 @@ package com.platformbuilders.controleescolar.school.api.controller;
 
 import com.platformbuilders.controleescolar.school.api.dto.SchoolDTO;
 import com.platformbuilders.controleescolar.school.service.SchoolService;
-import com.platformbuilders.controleescolar.student.api.dto.StudentDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/schools")
@@ -46,9 +43,7 @@ public class SchoolController {
     public Page<SchoolDTO> listSchools(@RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "10") int size,
                                          @RequestParam(defaultValue = "id") String sortBy) {
-
         int pageSize = Math.min(size, this.maxPageSize);
-
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortBy));
         return schoolService.findAll(pageable);
     }

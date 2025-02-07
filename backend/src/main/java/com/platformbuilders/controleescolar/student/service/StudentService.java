@@ -1,6 +1,5 @@
 package com.platformbuilders.controleescolar.student.service;
 
-
 import com.platformbuilders.controleescolar.student.api.dto.StudentDTO;
 import com.platformbuilders.controleescolar.student.domain.model.Student;
 import com.platformbuilders.controleescolar.student.exception.StudentNotFoundException;
@@ -27,14 +26,16 @@ public class StudentService {
     public StudentDTO create(StudentDTO studentDTO) {
         Student student = modelMapper.map(studentDTO, Student.class);
         Student savedStudent = studentRepository.save(student);
-
         return modelMapper.map(savedStudent, StudentDTO.class);
     }
 
     public StudentDTO findById(Long id) {
+        log.debug("Finding student with ID: {}", id);
         Student student = studentRepository.findById(id)
-                .orElseThrow(StudentNotFoundException::new);
-
+                .orElseThrow(() -> {
+                    log.warn("Student not found with ID: {}", id);
+                    return new StudentNotFoundException();
+                });
         return modelMapper.map(student, StudentDTO.class);
     }
 
@@ -42,24 +43,21 @@ public class StudentService {
         return studentRepository.findAll(pageable).map(student -> modelMapper.map(student, StudentDTO.class));
     }
 
-    public StudentDTO update(Long id, StudentDTO studentDTO) {
-
+    public StudentDTO update(Long id, StudentDTO updatedStudentDTO) {
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(StudentNotFoundException::new);
 
-        modelMapper.map(studentDTO, existingStudent);
+        modelMapper.map(updatedStudentDTO, existingStudent);
         existingStudent.setId(id);
 
         Student updatedStudent = studentRepository.save(existingStudent);
-
         return modelMapper.map(updatedStudent, StudentDTO.class);
     }
 
     public void delete(Long id) {
-       if (!studentRepository.existsById(id)) {
-           throw new StudentNotFoundException();
-       }
-
-       studentRepository.deleteById(id);
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException();
+        }
+        studentRepository.deleteById(id);
     }
 }
