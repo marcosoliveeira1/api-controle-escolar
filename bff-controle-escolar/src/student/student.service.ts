@@ -33,9 +33,22 @@ export class StudentService {
     return response.data;
   }
 
-  async updateStudent(id: number, studentDTO: StudentDTO): Promise<StudentDTO> {
+  async updateStudent(id: number, updateStudentInput: StudentDTO): Promise<StudentDTO> {
+
+    const existingStudent = await this.getStudent(id);
+
+    const allowedUpdates: string[] = [
+      "firstName", "lastName", "age", "gender", "guardianName", "level", "schoolId"
+    ];
+
+    const updates = Object.fromEntries(
+      allowedUpdates.map(key => [key, updateStudentInput[key]]).filter(([, value]) => value !== undefined)
+    );
+
+    Object.assign(existingStudent, updates);
+
     const response = await firstValueFrom(
-      this.httpService.put<StudentDTO>(`${this.studentApiUrl}/students/${id}`, studentDTO)
+      this.httpService.put<StudentDTO>(`${this.studentApiUrl}/students/${id}`, existingStudent)
     );
     return response.data;
   }

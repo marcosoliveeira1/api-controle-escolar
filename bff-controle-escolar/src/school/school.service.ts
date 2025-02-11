@@ -31,10 +31,23 @@ export class SchoolService {
     return response.data;
   }
 
-  async updateSchool(id: number, schoolDTO: SchoolDTO): Promise<SchoolDTO> {
-    const response = await firstValueFrom(
-      this.httpService.put<SchoolDTO>(`${this.schoolApiUrl}/schools/${id}`, schoolDTO)
+  async updateSchool(id: number, updateSchoolInput: SchoolDTO): Promise<SchoolDTO> {
+    const existingSchool = await this.getSchool(id);
+
+    const allowedUpdates: string[] = [
+      "name", "cnpj", "address", "phone", "studentsPerClassroom"
+    ];
+
+    const updates = Object.fromEntries(
+      allowedUpdates.map(key => [key, updateSchoolInput[key]]).filter(([, value]) => value !== undefined)
     );
+
+    Object.assign(existingSchool, updates);
+
+    const response = await firstValueFrom(
+      this.httpService.put<SchoolDTO>(`${this.schoolApiUrl}/schools/${id}`, existingSchool)
+    );
+
     return response.data;
   }
 

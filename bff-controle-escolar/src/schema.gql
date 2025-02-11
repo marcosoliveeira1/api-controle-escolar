@@ -104,9 +104,9 @@ input UpdateSchoolInput {
 input UpdateStudentInput {
   age: Int
   firstName: String
-  gender: String
+  gender: Gender
   guardianName: String
   lastName: String
-  level: String
+  level: StudentLevel
   schoolId: Int
 }
