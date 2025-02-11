@@ -1,0 +1,100 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateSchoolInput {
+  address: String!
+  cnpj: String!
+  name: String!
+  phone: String!
+  studentsPerClassroom: Int!
+}
+
+input CreateStudentInput {
+  age: Int!
+  firstName: String!
+  gender: String!
+  guardianName: String!
+  lastName: String!
+  level: String!
+  schoolId: Int!
+}
+
+type Mutation {
+  createSchool(createSchoolInput: CreateSchoolInput!): SchoolDTO!
+  createStudent(createStudentInput: CreateStudentInput!): StudentDTO!
+  deleteSchool(id: Int!): Boolean!
+  deleteStudent(id: Float!): Boolean!
+  registerEntry(studentId: Int!): StudentAccessDTO!
+  registerExit(studentId: Int!): StudentAccessDTO!
+  updateSchool(id: Int!, updateSchoolInput: UpdateSchoolInput!): SchoolDTO!
+  updateStudent(id: Float!, updateStudentInput: UpdateStudentInput!): StudentDTO!
+}
+
+type Query {
+  getAllSchools(page: Int! = 0, size: Int! = 10, sortBy: String = "id"): SchoolPage!
+  getAllStudents(page: Int! = 0, size: Int! = 10, sortBy: String = "id"): StudentPage!
+  getSchool(id: Int!): SchoolDTO
+  getStudent(id: Float!): StudentDTO
+}
+
+type SchoolDTO {
+  address: String!
+  cnpj: String!
+  id: Int
+  name: String!
+  phone: String!
+  studentsPerClassroom: Int!
+}
+
+type SchoolPage {
+  content: [SchoolDTO!]
+  number: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type StudentAccessDTO {
+  entryTime: String
+  exitTime: String
+  status: String
+  studentId: Int!
+}
+
+type StudentDTO {
+  age: Int!
+  firstName: String!
+  gender: String!
+  guardianName: String!
+  id: Int
+  lastName: String!
+  level: String!
+  schoolId: Int!
+}
+
+type StudentPage {
+  content: [StudentDTO!]
+  number: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+input UpdateSchoolInput {
+  address: String
+  cnpj: String
+  name: String
+  phone: String
+  studentsPerClassroom: Int
+}
+
+input UpdateStudentInput {
+  age: Int
+  firstName: String
+  gender: String
+  guardianName: String
+  lastName: String
+  level: String
+  schoolId: Int
+}
