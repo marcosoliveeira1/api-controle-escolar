@@ -1,99 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# BFF - Controle Escolar (School Control BFF)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is a Backend For Frontend (BFF) application built with NestJS and GraphQL. It serves as an intermediary layer between a frontend application (not included in this repository) and a backend REST API. The BFF aggregates data from the backend API and exposes it through a GraphQL interface, tailored to the needs of the frontend.
 
-## Project setup
+This specific BFF project focuses on managing school data, including students, schools, and student access records.
+
+## Technologies Used
+
+*   **Backend Framework:** [NestJS](https://nestjs.com/) - A progressive Node.js framework for building efficient, scalable, and enterprise-grade server-side applications.
+*   **GraphQL:** [GraphQL](https://graphql.org/) - A query language for your API, and a server-side runtime for executing queries by using a type system you define for your data.
+*   **GraphQL Driver:** [@nestjs/apollo](https://github.com/nestjs/graphql/tree/master/lib/drivers/apollo) -  NestJS integration with Apollo GraphQL Server.
+*   **HTTP Client:** [@nestjs/axios](https://github.com/nestjs/axios) -  NestJS module for making HTTP requests using Axios.
+*   **Validation:** [class-validator](https://github.com/typestack/class-validator) -  JavaScript library for object validation.
+*   **Testing:** [Jest](https://jestjs.io/) -  A delightful JavaScript Testing Framework with a focus on simplicity.
+*   **Containerization:** [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) - For containerizing and orchestrating the application.
+*   **Language:** [TypeScript](https://www.typescriptlang.org/) -  A strongly typed superset of JavaScript that compiles to plain JavaScript.
+
+## Prerequisites
+
+Before running the application, ensure you have the following installed:
+
+*   **Node.js** (>= 20.x) - [https://nodejs.org/](https://nodejs.org/)
+*   **npm** (Node Package Manager) or **yarn** - [https://www.npmjs.com/](https://www.npmjs.com/) or [https://yarnpkg.com/](https://yarnpkg.com/)
+*   **Docker** - [https://www.docker.com/get-started](https://www.docker.com/get-started) (If you want to run with Docker Compose)
+*   **Docker Compose** - [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/) (If you want to run with Docker Compose)
+
+## Local Development Setup
+
+Follow these steps to run the BFF application locally:
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/marcosoliveeira1/api-controle-escolar.git
+    cd bff-controle-escolar
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install  # or yarn install
+    ```
+
+3.  **Environment Configuration:**
+
+    Create a `.env` file in the root directory of the project and configure the following environment variables:
+
+    ```env
+    API_URL=http://localhost:8080/api # URL of the backend REST API
+    PORT=8081                      # Port for the BFF application (optional, default is 3000)
+    ```
+
+    **Note:**  Ensure that the backend API service is running and accessible at the URL specified in `API_URL`. By default, the application is configured to connect to a backend API running at `http://localhost:8080/api`.
+
+4.  **Run the application in development mode:**
+
+    ```bash
+    npm run start:dev  # or yarn start:dev
+    ```
+
+    This command will start the NestJS application in watch mode. You can access the GraphQL Playground at `http://localhost:8081/graphql` (or the port you configured in `.env`).
+
+## API Routes (GraphQL)
+
+Once the application is running, you can access the GraphQL Playground to explore the API. Here's a brief overview of the available queries and mutations:
+
+**Student Module:**
+
+*   **Queries:**
+    *   `student(id: Int!): StudentDTO` - Retrieves a student by ID.
+    *   `students(page: Int, size: Int, sortBy: String): StudentPage` - Retrieves a paginated list of students.
+
+*   **Mutations:**
+    *   `createStudent(createStudentInput: CreateStudentInput!): StudentDTO` - Creates a new student.
+    *   `updateStudent(id: Int!, updateStudentInput: UpdateStudentInput!): StudentDTO` - Updates an existing student.
+    *   `deleteStudent(id: Int!): Boolean` - Deletes a student.
+
+**School Module:**
+
+*   **Queries:**
+    *   `school(id: Int!): SchoolDTO` - Retrieves a school by ID.
+    *   `schools(page: Int, size: Int, sortBy: String): SchoolPage` - Retrieves a paginated list of schools.
+
+*   **Mutations:**
+    *   `createSchool(createSchoolInput: CreateSchoolInput!): SchoolDTO` - Creates a new school.
+    *   `updateSchool(id: Int!, updateSchoolInput: UpdateSchoolInput!): SchoolDTO` - Updates an existing school.
+    *   `deleteSchool(id: Int!): Boolean` - Deletes a school.
+
+**Student Access Module:**
+
+*   **Mutations:**
+    *   `registerEntry(studentId: Int!): StudentAccessDTO` - Registers student entry.
+    *   `registerExit(studentId: Int!): StudentAccessDTO` - Registers student exit.
+
+**Explore the GraphQL Schema in the Playground for detailed input types and response structures.**
+
+## Running with Docker Compose
+
+To run both the BFF and a backend service (assuming you have a backend Dockerfile in a sibling directory named `backend`), you can use Docker Compose.
+
+1.  **Navigate to the root directory** of your project structure (assuming your `docker-compose.yml` is placed one level up from `bff-controle-escolar`). If your `docker-compose.yml` is in `bff-controle-escolar`, then navigate to this directory.
+
+2.  **Run Docker Compose:**
+
+    ```bash
+    docker compose up --build
+    ```
+
+    This command will build and start both the `backend` and `bff` services as defined in the `docker-compose.yml` file.
+
+    *   The **Backend service** will be accessible at `http://localhost:8080`.
+    *   The **BFF service** (GraphQL Playground) will be accessible at `http://localhost:8081/graphql`.
+
+    **Note:**  The provided `docker-compose.yml` in the problem description assumes a sibling directory named `backend` containing a Dockerfile for the backend service.  You need to ensure that the backend service Dockerfile and application are correctly set up in the `backend` directory.
+
+## Running Tests
+
+To execute the unit tests for the application, use the following command:
 
 ```bash
-$ pnpm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+npm run test  # or yarn test
