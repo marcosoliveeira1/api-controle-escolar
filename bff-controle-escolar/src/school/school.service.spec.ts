@@ -37,7 +37,7 @@ describe('SchoolService', () => {
           provide: HttpService,
           useValue: {
             post: jest.fn(),
-            get: jest.fn(),
+            get: jest.fn().mockReturnValue(of({ data: mockSchoolDTO } as any)),
             put: jest.fn(),
             delete: jest.fn(),
           },
