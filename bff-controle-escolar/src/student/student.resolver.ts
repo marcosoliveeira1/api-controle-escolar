@@ -4,8 +4,7 @@ import { StudentService } from './student.service';
 import { StudentDTO } from './dto/student.dto';
 import { CreateStudentInput } from './dto/create-student.input';
 import { UpdateStudentInput } from './dto/update-student.input';
-import { Int } from '@nestjs/graphql';
-import { PaginationArgs } from 'src/common/pagination.args';
+import { PaginationArgs } from '../common/pagination.args';
 import { StudentPage } from './dto/student-page.dto';
 
 @Resolver()
@@ -21,12 +20,7 @@ export class StudentResolver {
 
   @Query(() => StudentDTO, { nullable: true })
   async getStudent(@Args('id', { type: () => Number }) id: number): Promise<StudentDTO | null> {
-    try {
-      return this.studentService.getStudent(id);
-    } catch (error) {
-      console.error('Error in getStudent resolver:', error);
-      throw error;
-    }
+    return this.studentService.getStudent(id);
   }
 
 
@@ -41,13 +35,8 @@ export class StudentResolver {
 
   @Mutation(() => Boolean)
   async deleteStudent(@Args('id', { type: () => Number }) id: number): Promise<boolean> {
-    try {
-      await this.studentService.deleteStudent(id);
-      return true;
-    } catch (error) {
-      console.error('Error in deleteStudent resolver:', error);
-      throw error;
-    }
+    await this.studentService.deleteStudent(id);
+    return true;
   }
   @Query(() => StudentPage)
   async getAllStudents(

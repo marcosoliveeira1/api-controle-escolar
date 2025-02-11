@@ -4,7 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { StudentDTO } from './dto/student.dto';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
-import { PaginationArgs } from 'src/common/pagination.args';
+import { PaginationArgs } from '../common/pagination.args';
 import { StudentPage } from './dto/student-page.dto';
 
 @Injectable()
@@ -19,55 +19,33 @@ export class StudentService {
   }
 
   async createStudent(studentDTO: StudentDTO): Promise<StudentDTO> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post<StudentDTO>(`${this.studentApiUrl}/students`, studentDTO)
-      );
-      return response.data;
-    } catch (error) {
-
-      console.error('Error creating student:', error.response?.data || error.message);
-      throw error;
-    }
+    const response = await firstValueFrom(
+      this.httpService.post<StudentDTO>(`${this.studentApiUrl}/students`, studentDTO)
+    );
+    return response.data;
   }
 
 
   async getStudent(id: number): Promise<StudentDTO> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.get<StudentDTO>(`${this.studentApiUrl}/students/${id}`)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error getting student:', error.response?.data || error.message);
-      throw error;
-    }
+    const response = await firstValueFrom(
+      this.httpService.get<StudentDTO>(`${this.studentApiUrl}/students/${id}`)
+    );
+    return response.data;
   }
 
   async updateStudent(id: number, studentDTO: StudentDTO): Promise<StudentDTO> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.put<StudentDTO>(`${this.studentApiUrl}/students/${id}`, studentDTO)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error updating student:', error.response?.data || error.message);
-      throw error;
-    }
+    const response = await firstValueFrom(
+      this.httpService.put<StudentDTO>(`${this.studentApiUrl}/students/${id}`, studentDTO)
+    );
+    return response.data;
   }
 
 
   async deleteStudent(id: number): Promise<boolean> {
-    try {
-      await firstValueFrom(
-        this.httpService.delete<void>(`${this.studentApiUrl}/students/${id}`)
-      );
-      return true;
-    } catch (error) {
-      console.error('Error deleting student:', error.response?.data || error.message);
-
-      throw error;
-    }
+    await firstValueFrom(
+      this.httpService.delete<void>(`${this.studentApiUrl}/students/${id}`)
+    );
+    return true;
   }
 
   async getAllStudents(paginationArgs: PaginationArgs): Promise<StudentPage> {
@@ -82,24 +60,17 @@ export class StudentService {
       params.append('sortBy', paginationArgs.sortBy);
     }
 
-    try {
-      const response = await firstValueFrom(
-        this.httpService.get<any>(`${this.studentApiUrl}/students?${params.toString()}`)
-      );
+    const response = await firstValueFrom(
+      this.httpService.get<any>(`${this.studentApiUrl}/students?${params.toString()}`)
+    );
 
 
-      return {
-        content: response.data.content as StudentDTO[],
-        totalElements: response.data.totalElements,
-        totalPages: response.data.totalPages,
-        size: response.data.size,
-        number: response.data.number,
-      };
-
-    } catch (error) {
-      console.error('Error getting all students:', error.response?.data || error.message);
-      throw error;
+    return {
+      content: response.data.content as StudentDTO[],
+      totalElements: response.data.totalElements,
+      totalPages: response.data.totalPages,
+      size: response.data.size,
+      number: response.data.number,
     }
-
   }
 }

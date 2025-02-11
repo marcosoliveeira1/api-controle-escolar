@@ -16,32 +16,22 @@ export class StudentAccessService {
   }
 
   async registerEntry(studentId: number): Promise<StudentAccessDTO> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post<StudentAccessDTO>(
-          `${this.studentAccessApiUrl}/access/entry/${studentId}`,
-          {}
-        )
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error registering entry:', error.response?.data || error.message);
-      throw error;
-    }
+    const response = await firstValueFrom(
+      this.httpService.post<StudentAccessDTO>(
+        `${this.studentAccessApiUrl}/access/entry/${studentId}`,
+        {}
+      )
+    );
+    return response.data;
   }
 
   async registerExit(studentId: number): Promise<StudentAccessDTO> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post<StudentAccessDTO>(
-          `${this.studentAccessApiUrl}/access/exit/${studentId}`,
-          {}
-        )
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error registering exit:', error.response?.data || error.message);
-      throw error;
-    }
+    const response = await firstValueFrom(
+      this.httpService.post<StudentAccessDTO>(
+        `${this.studentAccessApiUrl}/access/exit/${studentId}`,
+        {}
+      )
+    );
+    return response.data;
   }
 }

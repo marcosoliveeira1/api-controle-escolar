@@ -1,5 +1,7 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsString, IsInt, Min } from 'class-validator';
+import { Gender } from './enums/gender.enum';
+import { StudentLevel } from './enums/level.enum';
 
 @InputType()
 export class CreateStudentInput {
@@ -13,21 +15,19 @@ export class CreateStudentInput {
   @IsString()
   lastName: string;
 
-  @Field()
+  @Field(() => Gender)
   @IsNotEmpty()
-  @IsString()
-  gender: string;
+  gender: Gender;
 
   @Field(() => Int)
   @IsInt()
   @Min(0)
   age: number;
 
-  @Field()
+  @Field(() => StudentLevel)
   @IsNotEmpty()
-  @IsString()
-  level: string;
-
+  level: StudentLevel;
+  
   @Field()
   @IsNotEmpty()
   @IsString()
