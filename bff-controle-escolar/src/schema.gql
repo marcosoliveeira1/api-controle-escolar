@@ -13,11 +13,17 @@ input CreateSchoolInput {
 input CreateStudentInput {
   age: Int!
   firstName: String!
-  gender: String!
+  gender: Gender!
   guardianName: String!
   lastName: String!
-  level: String!
+  level: StudentLevel!
   schoolId: Int!
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
 }
 
 type Mutation {
@@ -71,6 +77,12 @@ type StudentDTO {
   lastName: String!
   level: String!
   schoolId: Int!
+}
+
+enum StudentLevel {
+  ELEMENTARY
+  HIGH
+  MIDDLE
 }
 
 type StudentPage {
