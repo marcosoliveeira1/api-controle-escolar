@@ -1,5 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString, IsInt, Min } from 'class-validator';
+import { StudentLevel } from './enums/level.enum';
+import { Gender } from './enums/gender.enum';
 
 @ObjectType()
 export class StudentDTO {
@@ -19,7 +21,7 @@ export class StudentDTO {
   @Field()
   @IsNotEmpty()
   @IsString()
-  gender: string;
+  gender: Gender;
 
   @Field(() => Int)
   @IsInt()
@@ -29,7 +31,7 @@ export class StudentDTO {
   @Field()
   @IsNotEmpty()
   @IsString()
-  level: string;
+  level: StudentLevel;
 
   @Field()
   @IsNotEmpty()

@@ -17,9 +17,9 @@ describe('StudentResolver', () => {
     id: 1,
     firstName: 'John',
     lastName: 'Doe',
-    gender: 'MALE',
+    gender: Gender.MALE,
     age: 10,
-    level: 'ELEMENTARY',
+    level: StudentLevel.ELEMENTARY,
     guardianName: 'Jane Doe',
     schoolId: 1,
   };

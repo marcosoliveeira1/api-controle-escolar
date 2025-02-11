@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { StudentDTO } from './dto/student.dto';
 import { PaginationArgs } from '../common/pagination.args';
 import { StudentPage } from './dto/student-page.dto';
+import { Gender } from './dto/enums/gender.enum';
+import { StudentLevel } from './dto/enums/level.enum';
 
 describe('StudentService', () => {
   let studentService: StudentService;
@@ -16,9 +18,9 @@ describe('StudentService', () => {
     id: 1,
     firstName: 'John',
     lastName: 'Doe',
-    gender: 'MALE',
+    gender: Gender.MALE,
     age: 10,
-    level: 'ELEMENTARY',
+    level: StudentLevel.ELEMENTARY,
     guardianName: 'Jane Doe',
     schoolId: 1,
   };
