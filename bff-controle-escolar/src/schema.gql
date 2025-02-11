@@ -81,8 +81,8 @@ type StudentDTO {
 
 enum StudentLevel {
   ELEMENTARY
-  HIGH
-  MIDDLE
+  HIGH_SCHOOL
+  MIDDLE_SCHOOL
 }
 
 type StudentPage {
