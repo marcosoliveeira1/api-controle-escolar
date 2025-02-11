@@ -1,0 +1,631 @@
+// src/student/student.service.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { StudentService } from './student.service';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { of } from 'rxjs';
+import { StudentDTO } from './dto/student.dto';
+import { PaginationArgs } from '../common/pagination.args';
+import { StudentPage } from './dto/student-page.dto';
+
+describe('StudentService', () => {
+  let studentService: StudentService;
+  let httpService: HttpService;
+  let configService: ConfigService;
+
+  const mockStudentDTO: StudentDTO = {
+    id: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    gender: 'MALE',
+    age: 10,
+    level: 'ELEMENTARY',
+    guardianName: 'Jane Doe',
+    schoolId: 1,
+  };
+
+  const mockStudentPage: StudentPage = {
+    content: [mockStudentDTO],
+    totalElements: 1,
+    totalPages: 1,
+    size: 10,
+    number: 0,
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        StudentService,
+        {
+          provide: HttpService,
+          useValue: {
+            post: jest.fn(),
+            get: jest.fn(),
+            put: jest.fn(),
+            delete: jest.fn(),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockReturnValue('http://localhost:8080/api'),
+          },
+        },
+      ],
+    }).compile();
+
+    studentService = module.get<StudentService>(StudentService);
+    httpService = module.get<HttpService>(HttpService);
+    configService = module.get<ConfigService>(ConfigService);
+  });
+
+  it('should be defined', () => {
+    expect(studentService).toBeDefined();
+  });
+
+  describe('createStudent', () => {
+    it('should create a student', async () => {
+      jest.spyOn(httpService, 'post').mockReturnValue(of({ data: mockStudentDTO } as any));
+      const result = await studentService.createStudent(mockStudentDTO);
+      expect(result).toEqual(mockStudentDTO);
+      expect(httpService.post).toHaveBeenCalledWith('http://localhost:8080/api/students', mockStudentDTO);
+    });
+  });
+
+  describe('getStudent', () => {
+    it('should return a student by id', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentDTO } as any));
+      const result = await studentService.getStudent(1);
+      expect(result).toEqual(mockStudentDTO);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/students/1');
+    });
+  });
+
+  describe('updateStudent', () => {
+    it('should update a student', async () => {
+      jest.spyOn(httpService, 'put').mockReturnValue(of({ data: mockStudentDTO } as any));
+      const result = await studentService.updateStudent(1, mockStudentDTO);
+      expect(result).toEqual(mockStudentDTO);
+      expect(httpService.put).toHaveBeenCalledWith('http://localhost:8080/api/students/1', mockStudentDTO);
+    });
+  });
+
+  describe('deleteStudent', () => {
+    it('should delete a student', async () => {
+      jest.spyOn(httpService, 'delete').mockReturnValue(of({ data: {} } as any));
+      const result = await studentService.deleteStudent(1);
+      expect(result).toEqual(true);
+      expect(httpService.delete).toHaveBeenCalledWith('http://localhost:8080/api/students/1');
+    });
+  });
+
+  describe('getAllStudents', () => {
+    it('should return all students with pagination', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentPage } as any));
+      const paginationArgs: PaginationArgs = { page: 0, size: 10 };
+      const result = await studentService.getAllStudents(paginationArgs);
+      expect(result).toEqual(mockStudentPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/students?page=0&size=10');
+    });
+
+    it('should return all students with default pagination if no args provided', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentPage } as any));
+      const paginationArgs = {};
+      const result = await studentService.getAllStudents(paginationArgs as PaginationArgs);
+      expect(result).toEqual(mockStudentPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/students?');
+    });
+
+    it('should return all students with sorting', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentPage } as any));
+      const paginationArgs: PaginationArgs = { sortBy: 'firstName' };
+      const result = await studentService.getAllStudents(paginationArgs);
+      expect(result).toEqual(mockStudentPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/students?sortBy=firstName');
+    });
+  });
+});
+
+// src/school/school.service.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { SchoolService } from './school.service';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { of } from 'rxjs';
+import { SchoolDTO } from './dto/school.dto';
+import { PaginationArgs } from '../common/pagination.args';
+import { SchoolPage } from './dto/school-page.dto';
+
+describe('SchoolService', () => {
+  let schoolService: SchoolService;
+  let httpService: HttpService;
+  let configService: ConfigService;
+
+  const mockSchoolDTO: SchoolDTO = {
+    id: 1,
+    name: 'Test School',
+    cnpj: '12345678901234',
+    address: 'Test Address',
+    phone: '123-456-7890',
+    studentsPerClassroom: 20,
+  };
+
+  const mockSchoolPage: SchoolPage = {
+    content: [mockSchoolDTO],
+    totalElements: 1,
+    totalPages: 1,
+    size: 10,
+    number: 0,
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        SchoolService,
+        {
+          provide: HttpService,
+          useValue: {
+            post: jest.fn(),
+            get: jest.fn(),
+            put: jest.fn(),
+            delete: jest.fn(),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockReturnValue('http://localhost:8080/api'),
+          },
+        },
+      ],
+    }).compile();
+
+    schoolService = module.get<SchoolService>(SchoolService);
+    httpService = module.get<HttpService>(HttpService);
+    configService = module.get<ConfigService>(ConfigService);
+  });
+
+  it('should be defined', () => {
+    expect(schoolService).toBeDefined();
+  });
+
+  describe('createSchool', () => {
+    it('should create a school', async () => {
+      jest.spyOn(httpService, 'post').mockReturnValue(of({ data: mockSchoolDTO } as any));
+      const result = await schoolService.createSchool(mockSchoolDTO);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(httpService.post).toHaveBeenCalledWith('http://localhost:8080/api/schools', mockSchoolDTO);
+    });
+  });
+
+  describe('getSchool', () => {
+    it('should return a school by id', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockSchoolDTO } as any));
+      const result = await schoolService.getSchool(1);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/schools/1');
+    });
+  });
+
+  describe('updateSchool', () => {
+    it('should update a school', async () => {
+      jest.spyOn(httpService, 'put').mockReturnValue(of({ data: mockSchoolDTO } as any));
+      const result = await schoolService.updateSchool(1, mockSchoolDTO);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(httpService.put).toHaveBeenCalledWith('http://localhost:8080/api/schools/1', mockSchoolDTO);
+    });
+  });
+
+  describe('deleteSchool', () => {
+    it('should delete a school', async () => {
+      jest.spyOn(httpService, 'delete').mockReturnValue(of({ data: {} } as any));
+      const result = await schoolService.deleteSchool(1);
+      expect(result).toEqual(true);
+      expect(httpService.delete).toHaveBeenCalledWith('http://localhost:8080/api/schools/1');
+    });
+  });
+
+  describe('getAllSchools', () => {
+    it('should return all schools with pagination', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockSchoolPage } as any));
+      const paginationArgs: PaginationArgs = { page: 0, size: 10 };
+      const result = await schoolService.getAllSchools(paginationArgs);
+      expect(result).toEqual(mockSchoolPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/schools?page=0&size=10');
+    });
+
+    it('should return all schools with default pagination if no args provided', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockSchoolPage } as any));
+      const paginationArgs = {};
+      const result = await schoolService.getAllSchools(paginationArgs as PaginationArgs);
+      expect(result).toEqual(mockSchoolPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/schools?');
+    });
+
+    it('should return all schools with sorting', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockSchoolPage } as any));
+      const paginationArgs: PaginationArgs = { sortBy: 'name' };
+      const result = await schoolService.getAllSchools(paginationArgs);
+      expect(result).toEqual(mockSchoolPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/schools?sortBy=name');
+    });
+  });
+});
+
+// src/student-access/student-access.service.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { StudentAccessService } from './student-access.service';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { of } from 'rxjs';
+import { StudentAccessDTO } from './dto/student-access.dto';
+
+describe('StudentAccessService', () => {
+  let studentAccessService: StudentAccessService;
+  let httpService: HttpService;
+  let configService: ConfigService;
+
+  const mockStudentAccessDTO: StudentAccessDTO = {
+    studentId: 1,
+    entryTime: '2024-01-01T08:00:00.000Z',
+    exitTime: '2024-01-01T16:00:00.000Z',
+    status: 'ACTIVE',
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        StudentAccessService,
+        {
+          provide: HttpService,
+          useValue: {
+            post: jest.fn(),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockReturnValue('http://localhost:8080/api'),
+          },
+        },
+      ],
+    }).compile();
+
+    studentAccessService = module.get<StudentAccessService>(StudentAccessService);
+    httpService = module.get<HttpService>(HttpService);
+    configService = module.get<ConfigService>(ConfigService);
+  });
+
+  it('should be defined', () => {
+    expect(studentAccessService).toBeDefined();
+  });
+
+  describe('registerEntry', () => {
+    it('should register student entry', async () => {
+      jest.spyOn(httpService, 'post').mockReturnValue(of({ data: mockStudentAccessDTO } as any));
+      const result = await studentAccessService.registerEntry(1);
+      expect(result).toEqual(mockStudentAccessDTO);
+      expect(httpService.post).toHaveBeenCalledWith('http://localhost:8080/api/access/entry/1', {});
+    });
+  });
+
+  describe('registerExit', () => {
+    it('should register student exit', async () => {
+      jest.spyOn(httpService, 'post').mockReturnValue(of({ data: mockStudentAccessDTO } as any));
+      const result = await studentAccessService.registerExit(1);
+      expect(result).toEqual(mockStudentAccessDTO);
+      expect(httpService.post).toHaveBeenCalledWith('http://localhost:8080/api/access/exit/1', {});
+    });
+  });
+});
+
+// src/student/student.resolver.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { StudentResolver } from './student.resolver';
+import { StudentService } from './student.service';
+import { StudentDTO } from './dto/student.dto';
+import { CreateStudentInput } from './dto/create-student.input';
+import { UpdateStudentInput } from './dto/update-student.input';
+import { Gender } from './dto/enums/gender.enum';
+import { StudentLevel } from './dto/enums/level.enum';
+import { PaginationArgs } from '../common/pagination.args';
+import { StudentPage } from './dto/student-page.dto';
+
+describe('StudentResolver', () => {
+  let resolver: StudentResolver;
+  let service: StudentService;
+
+  const mockStudentDTO: StudentDTO = {
+    id: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    gender: 'MALE',
+    age: 10,
+    level: 'ELEMENTARY',
+    guardianName: 'Jane Doe',
+    schoolId: 1,
+  };
+
+  const mockStudentPage: StudentPage = {
+    content: [mockStudentDTO],
+    totalElements: 1,
+    totalPages: 1,
+    size: 10,
+    number: 0,
+  };
+
+  const mockCreateStudentInput: CreateStudentInput = {
+    firstName: 'John',
+    lastName: 'Doe',
+    gender: Gender.MALE,
+    age: 10,
+    level: StudentLevel.ELEMENTARY,
+    guardianName: 'Jane Doe',
+    schoolId: 1,
+  };
+
+  const mockUpdateStudentInput: UpdateStudentInput = {
+    firstName: 'Jane',
+  };
+
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        StudentResolver,
+        {
+          provide: StudentService,
+          useValue: {
+            createStudent: jest.fn().mockResolvedValue(mockStudentDTO),
+            getStudent: jest.fn().mockResolvedValue(mockStudentDTO),
+            updateStudent: jest.fn().mockResolvedValue(mockStudentDTO),
+            deleteStudent: jest.fn().mockResolvedValue(true),
+            getAllStudents: jest.fn().mockResolvedValue(mockStudentPage),
+          },
+        },
+      ],
+    }).compile();
+
+    resolver = module.get<StudentResolver>(StudentResolver);
+    service = module.get<StudentService>(StudentService);
+  });
+
+  it('should be defined', () => {
+    expect(resolver).toBeDefined();
+  });
+
+  describe('createStudent', () => {
+    it('should create a student', async () => {
+      const result = await resolver.createStudent(mockCreateStudentInput);
+      expect(result).toEqual(mockStudentDTO);
+      expect(service.createStudent).toHaveBeenCalledWith(mockCreateStudentInput);
+    });
+  });
+
+  describe('getStudent', () => {
+    it('should get a student by id', async () => {
+      const result = await resolver.getStudent(1);
+      expect(result).toEqual(mockStudentDTO);
+      expect(service.getStudent).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('updateStudent', () => {
+    it('should update a student', async () => {
+      const result = await resolver.updateStudent(1, mockUpdateStudentInput);
+      expect(result).toEqual(mockStudentDTO);
+      expect(service.updateStudent).toHaveBeenCalledWith(1, mockUpdateStudentInput as StudentDTO);
+    });
+  });
+
+  describe('deleteStudent', () => {
+    it('should delete a student', async () => {
+      const result = await resolver.deleteStudent(1);
+      expect(result).toEqual(true);
+      expect(service.deleteStudent).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('getAllStudents', () => {
+    it('should get all students', async () => {
+      const paginationArgs: PaginationArgs = { page: 0, size: 10 };
+      const result = await resolver.getAllStudents(paginationArgs);
+      expect(result).toEqual(mockStudentPage);
+      expect(service.getAllStudents).toHaveBeenCalledWith(paginationArgs);
+    });
+  });
+});
+
+// src/school/school.resolver.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { SchoolResolver } from './school.resolver';
+import { SchoolService } from './school.service';
+import { SchoolDTO } from './dto/school.dto';
+import { CreateSchoolInput } from './dto/create-school.input';
+import { UpdateSchoolInput } from './dto/update-school.input';
+import { PaginationArgs } from '../common/pagination.args';
+import { SchoolPage } from './dto/school-page.dto';
+
+describe('SchoolResolver', () => {
+  let resolver: SchoolResolver;
+  let service: SchoolService;
+
+  const mockSchoolDTO: SchoolDTO = {
+    id: 1,
+    name: 'Test School',
+    cnpj: '1234567890',
+    address: 'Test Address',
+    phone: '123-456-7890',
+    studentsPerClassroom: 20,
+  };
+
+  const mockSchoolPage: SchoolPage = {
+    content: [mockSchoolDTO],
+    totalElements: 1,
+    totalPages: 1,
+    size: 10,
+    number: 0,
+  };
+
+  const mockCreateSchoolInput: CreateSchoolInput = {
+    name: 'Test School',
+    cnpj: '1234567890',
+    address: 'Test Address',
+    phone: '123-456-7890',
+    studentsPerClassroom: 20,
+  };
+
+  const mockUpdateSchoolInput: UpdateSchoolInput = {
+    name: 'New School Name',
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        SchoolResolver,
+        {
+          provide: SchoolService,
+          useValue: {
+            createSchool: jest.fn().mockResolvedValue(mockSchoolDTO),
+            getSchool: jest.fn().mockResolvedValue(mockSchoolDTO),
+            updateSchool: jest.fn().mockResolvedValue(mockSchoolDTO),
+            deleteSchool: jest.fn().mockResolvedValue(true),
+            getAllSchools: jest.fn().mockResolvedValue(mockSchoolPage),
+          },
+        },
+      ],
+    }).compile();
+
+    resolver = module.get<SchoolResolver>(SchoolResolver);
+    service = module.get<SchoolService>(SchoolService);
+  });
+
+  it('should be defined', () => {
+    expect(resolver).toBeDefined();
+  });
+
+  describe('createSchool', () => {
+    it('should create a school', async () => {
+      const result = await resolver.createSchool(mockCreateSchoolInput);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(service.createSchool).toHaveBeenCalledWith(mockCreateSchoolInput);
+    });
+  });
+
+  describe('getSchool', () => {
+    it('should get a school by id', async () => {
+      const result = await resolver.getSchool(1);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(service.getSchool).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('updateSchool', () => {
+    it('should update a school', async () => {
+      const result = await resolver.updateSchool(1, mockUpdateSchoolInput);
+      expect(result).toEqual(mockSchoolDTO);
+      expect(service.updateSchool).toHaveBeenCalledWith(1, mockUpdateSchoolInput as SchoolDTO);
+    });
+  });
+
+  describe('deleteSchool', () => {
+    it('should delete a school', async () => {
+      const result = await resolver.deleteSchool(1);
+      expect(result).toEqual(true);
+      expect(service.deleteSchool).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('getAllSchools', () => {
+    it('should get all schools', async () => {
+      const paginationArgs: PaginationArgs = { page: 0, size: 10 };
+      const result = await resolver.getAllSchools(paginationArgs);
+      expect(result).toEqual(mockSchoolPage);
+      expect(service.getAllSchools).toHaveBeenCalledWith(paginationArgs);
+    });
+  });
+});
+
+// src/student-access/student-access.resolver.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { StudentAccessResolver } from './student-access.resolver';
+import { StudentAccessService } from './student-access.service';
+import { StudentAccessDTO } from './dto/student-access.dto';
+
+describe('StudentAccessResolver', () => {
+  let resolver: StudentAccessResolver;
+  let service: StudentAccessService;
+
+  const mockStudentAccessDTO: StudentAccessDTO = {
+    studentId: 1,
+    entryTime: '2024-01-01T08:00:00.000Z',
+    exitTime: '2024-01-01T16:00:00.000Z',
+    status: 'ACTIVE',
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        StudentAccessResolver,
+        {
+          provide: StudentAccessService,
+          useValue: {
+            registerEntry: jest.fn().mockResolvedValue(mockStudentAccessDTO),
+            registerExit: jest.fn().mockResolvedValue(mockStudentAccessDTO),
+          },
+        },
+      ],
+    }).compile();
+
+    resolver = module.get<StudentAccessResolver>(StudentAccessResolver);
+    service = module.get<StudentAccessService>(StudentAccessService);
+  });
+
+  it('should be defined', () => {
+    expect(resolver).toBeDefined();
+  });
+
+  describe('registerEntry', () => {
+    it('should register entry', async () => {
+      const result = await resolver.registerEntry(1);
+      expect(result).toEqual(mockStudentAccessDTO);
+      expect(service.registerEntry).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('registerExit', () => {
+    it('should register exit', async () => {
+      const result = await resolver.registerExit(1);
+      expect(result).toEqual(mockStudentAccessDTO);
+      expect(service.registerExit).toHaveBeenCalledWith(1);
+    });
+  });
+});
+
+// src/app.controller.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+describe('AppController', () => {
+  let appController: AppController;
+  let appService: AppService;
+
+  beforeEach(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      controllers: [AppController],
+      providers: [AppService],
+    }).compile();
+
+    appController = app.get<AppController>(AppController);
+    appService = app.get<AppService>(AppService);
+  });
+
+  describe('root', () => {
+    it('should return "Hello World!"', () => {
+      jest.spyOn(appService, 'getHello').mockReturnValue('Hello World!');
+      expect(appController.getHello()).toBe('Hello World!');
+      expect(appService.getHello).toHaveBeenCalled();
+    });
+  });
+});
