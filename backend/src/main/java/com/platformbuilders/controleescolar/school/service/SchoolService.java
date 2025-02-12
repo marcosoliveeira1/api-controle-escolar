@@ -3,8 +3,10 @@ package com.platformbuilders.controleescolar.school.service;
 import com.platformbuilders.controleescolar.school.api.dto.SchoolDTO;
 import com.platformbuilders.controleescolar.school.domain.model.School;
 import com.platformbuilders.controleescolar.school.exception.SchoolCnpjAlreadyExistsException;
+import com.platformbuilders.controleescolar.school.exception.SchoolHasStudentsException;
 import com.platformbuilders.controleescolar.school.exception.SchoolNotFoundException;
 import com.platformbuilders.controleescolar.school.infra.repository.SchoolRepository;
+import com.platformbuilders.controleescolar.student.infra.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,14 @@ import org.springframework.stereotype.Service;
 public class SchoolService {
 
     private final SchoolRepository schoolRepository;
+    private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SchoolService(SchoolRepository schoolRepository, ModelMapper modelMapper) {
+    public SchoolService(SchoolRepository schoolRepository, StudentRepository studentRepository, ModelMapper modelMapper) {
         this.schoolRepository = schoolRepository;
         this.modelMapper = modelMapper;
+        this.studentRepository = studentRepository;
     }
 
     public SchoolDTO create(SchoolDTO schoolDTO) {
@@ -68,6 +72,11 @@ public class SchoolService {
         if (!schoolRepository.existsById(id)) {
             throw new SchoolNotFoundException();
         }
+
+        if(studentRepository.existsBySchoolId(id)) {
+            throw new SchoolHasStudentsException();
+        }
+
         schoolRepository.deleteById(id);
     }
 }

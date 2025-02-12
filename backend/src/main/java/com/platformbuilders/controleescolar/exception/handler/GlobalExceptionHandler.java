@@ -1,5 +1,6 @@
 package com.platformbuilders.controleescolar.exception.handler;
 
+import com.platformbuilders.controleescolar.exception.BusinessRuleException;
 import com.platformbuilders.controleescolar.exception.ResourceAlreadyExistsException;
 import com.platformbuilders.controleescolar.exception.ResourceNotFoundException;
 import com.platformbuilders.controleescolar.exception.response.ErrorResponse;
@@ -37,6 +38,17 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 "CONFLICT",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(BusinessRuleException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBusinessRuleException(BusinessRuleException ex) {
+        return new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "BAD_REQUEST",
                 ex.getMessage(),
                 LocalDateTime.now()
         );

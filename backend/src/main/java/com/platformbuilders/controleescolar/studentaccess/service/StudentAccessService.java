@@ -27,7 +27,6 @@ public class StudentAccessService {
     public StudentAccessService(
             StudentAccessRepository accessRepository,
             StudentRepository studentRepository,
-            SchoolRepository schoolRepository,
             ModelMapper modelMapper) {
         this.accessRepository = accessRepository;
         this.studentRepository = studentRepository;
