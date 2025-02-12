@@ -1,4 +1,3 @@
-
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { StudentService } from './student.service';
 import { StudentDTO } from './dto/student.dto';

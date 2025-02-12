@@ -1,4 +1,3 @@
-
 import { Injectable, Inject } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { StudentDTO } from './dto/student.dto';
@@ -76,7 +75,6 @@ export class StudentService {
     const response = await firstValueFrom(
       this.httpService.get<any>(`${this.studentApiUrl}/students?${params.toString()}`)
     );
-
 
     return {
       content: response.data.content as StudentDTO[],
