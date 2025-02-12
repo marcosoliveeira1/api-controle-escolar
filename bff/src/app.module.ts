@@ -4,6 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { StudentModule } from './student/student.module';
 import { StudentAccessModule } from './student-access/student-access.module';
 import { SchoolModule } from './school/school.module';
+import { CommonModule } from './common/common.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     StudentModule,
     StudentAccessModule,
     SchoolModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

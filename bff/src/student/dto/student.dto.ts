@@ -20,7 +20,6 @@ export class StudentDTO {
 
   @Field()
   @IsNotEmpty()
-  @IsString()
   gender: Gender;
 
   @Field(() => Int)
@@ -30,7 +29,6 @@ export class StudentDTO {
 
   @Field()
   @IsNotEmpty()
-  @IsString()
   level: StudentLevel;
 
   @Field()

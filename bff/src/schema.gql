@@ -38,8 +38,9 @@ type Mutation {
 }
 
 type Query {
-  getAllSchools(page: Int! = 0, size: Int! = 10, sortBy: String = "id"): SchoolPage!
-  getAllStudents(page: Int! = 0, size: Int! = 10, sortBy: String = "id"): StudentPage!
+  getAllSchools(page: Int! = 0, size: Int! = 10, sortBy: String = "id", sortDirection: String = "ASC"): SchoolPage!
+  getAllStudentAccess(page: Int! = 0, size: Int! = 10, sortBy: String = "id", sortDirection: String = "ASC"): StudentAccessPage!
+  getAllStudents(page: Int! = 0, size: Int! = 10, sortBy: String = "id", sortDirection: String = "ASC"): StudentPage!
   getSchool(id: Int!): SchoolDTO
   getStudent(id: Float!): StudentDTO
 }
@@ -64,8 +65,17 @@ type SchoolPage {
 type StudentAccessDTO {
   entryTime: String
   exitTime: String
+  id: Int!
   status: String
   studentId: Int!
+}
+
+type StudentAccessPage {
+  content: [StudentAccessDTO!]
+  number: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
 }
 
 type StudentDTO {

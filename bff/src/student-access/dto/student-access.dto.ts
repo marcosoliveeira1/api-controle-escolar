@@ -3,6 +3,9 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class StudentAccessDTO {
   @Field(() => Int)
+  id?: number;
+
+  @Field(() => Int)
   studentId: number;
 
   @Field({ nullable: true })

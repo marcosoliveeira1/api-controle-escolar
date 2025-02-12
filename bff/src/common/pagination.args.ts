@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsOptional, Min, IsString } from 'class-validator';
+import { IsOptional, Min, IsString, IsEnum } from 'class-validator';
 
 @ArgsType()
 export class PaginationArgs {
@@ -17,4 +17,9 @@ export class PaginationArgs {
     @IsOptional()
     @IsString()
     sortBy?: string;
+
+    @Field({ nullable: true, defaultValue: 'ASC' })
+    @IsOptional()
+    @IsString()
+    sortDirection?: string;
 }

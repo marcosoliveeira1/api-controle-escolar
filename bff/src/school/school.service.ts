@@ -69,6 +69,9 @@ export class SchoolService {
     if (paginationArgs.sortBy) {
       params.append('sortBy', paginationArgs.sortBy);
     }
+    if (paginationArgs.sortDirection) {
+      params.append('sortDirection', paginationArgs.sortDirection);
+    }
 
     const response = await firstValueFrom(
       this.httpService.get<any>(`${this.schoolApiUrl}/schools?${params.toString()}`)

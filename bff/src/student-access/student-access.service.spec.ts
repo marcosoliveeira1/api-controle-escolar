@@ -4,6 +4,8 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
 import { StudentAccessDTO } from './dto/student-access.dto';
+import { PaginationArgs } from '../common/pagination.args';
+import { StudentAccessPage } from './dto/student-access-page.dto';
 
 describe('StudentAccessService', () => {
   let studentAccessService: StudentAccessService;
@@ -16,6 +18,13 @@ describe('StudentAccessService', () => {
     exitTime: '2024-01-01T16:00:00.000Z',
     status: 'ACTIVE',
   };
+  const mockStudentAccessPage: StudentAccessPage = {
+    content: [mockStudentAccessDTO],
+    totalElements: 1,
+    totalPages: 1,
+    size: 10,
+    number: 0,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -25,6 +34,7 @@ describe('StudentAccessService', () => {
           provide: HttpService,
           useValue: {
             post: jest.fn(),
+            get: jest.fn().mockReturnValue(of({ data: mockStudentAccessDTO } as any)),
           },
         },
         {
@@ -60,6 +70,39 @@ describe('StudentAccessService', () => {
       const result = await studentAccessService.registerExit(1);
       expect(result).toEqual(mockStudentAccessDTO);
       expect(httpService.post).toHaveBeenCalledWith('http://localhost:8080/api/access/exit/1', {});
+    });
+  });
+
+  describe('getAllStudentAccess', () => {
+    it('should return all student access records with pagination', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentAccessPage } as any));
+      const paginationArgs: PaginationArgs = { page: 0, size: 10 };
+      const result = await studentAccessService.getAllStudentAccess(paginationArgs);
+      expect(result).toEqual(mockStudentAccessPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/access?page=0&size=10');
+    });
+
+    it('should return all student access records with default pagination if no args provided', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentAccessPage } as any));
+      const paginationArgs = {};
+      const result = await studentAccessService.getAllStudentAccess(paginationArgs as PaginationArgs);
+      expect(result).toEqual(mockStudentAccessPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/access?');
+    });
+
+    it('should return all student access records with sorting', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentAccessPage } as any));
+      const paginationArgs: PaginationArgs = { sortBy: 'entryTime' };
+      const result = await studentAccessService.getAllStudentAccess(paginationArgs);
+      expect(result).toEqual(mockStudentAccessPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/access?sortBy=entryTime');
+    });
+    it('should return all student access records with sorting and direction', async () => {
+      jest.spyOn(httpService, 'get').mockReturnValue(of({ data: mockStudentAccessPage } as any));
+      const paginationArgs: PaginationArgs = { sortBy: 'entryTime', sortDirection: 'DESC' };
+      const result = await studentAccessService.getAllStudentAccess(paginationArgs);
+      expect(result).toEqual(mockStudentAccessPage);
+      expect(httpService.get).toHaveBeenCalledWith('http://localhost:8080/api/access?sortBy=entryTime&sortDirection=DESC');
     });
   });
 });
