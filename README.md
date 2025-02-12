@@ -26,30 +26,22 @@ Cada serviço tem um **README.md** dentro de sua respectiva pasta (**backend/** 
    cd api-controle-escolar
    ```
 
-2. **Configure as variáveis de ambiente**
-   - Crie um arquivo `.env` na raiz do projeto e defina as variáveis
-     necessárias, como as portas:
-     ```ini
-     HOST_PORT=3000
-     CONTAINER_PORT=3000
-     ```
-
-3. **Inicie os containers**
+2. **Inicie os containers**
    ```sh
-   docker-compose up --build
+   docker compose up --build
    ```
    - Para rodar os containers em background (modo "detached"), use:
      ```sh
-     docker-compose up -d --build
+     docker compose up -d --build
      ```
 
-4. **Acesse os serviços**
+3. **Acesse os serviços**
    - Backend: [http://localhost:8080](http://localhost:8080)
    - BFF: [http://localhost:3000](http://localhost:3000)
 
-5. **Parar os containers**
+4. **Parar os containers**
    ```sh
-   docker-compose down
+   docker compose down
    ```
 
 ## Informações Adicionais
