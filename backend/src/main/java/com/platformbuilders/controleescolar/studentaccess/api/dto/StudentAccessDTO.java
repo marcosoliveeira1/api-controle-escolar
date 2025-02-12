@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentAccessDTO {
+    private Long id;
     private Long studentId;
-    private LocalDateTime entryTime;
-    private LocalDateTime exitTime;
+    private String entryTime;
+    private String exitTime;
     private String status;
 }

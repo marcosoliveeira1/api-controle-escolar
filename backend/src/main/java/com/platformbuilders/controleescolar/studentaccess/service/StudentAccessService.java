@@ -7,10 +7,13 @@ import com.platformbuilders.controleescolar.student.infra.repository.StudentRepo
 import com.platformbuilders.controleescolar.studentaccess.api.dto.StudentAccessDTO;
 import com.platformbuilders.controleescolar.studentaccess.domain.model.StudentAccess;
 import com.platformbuilders.controleescolar.studentaccess.infra.repository.StudentAccessRepository;
+import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,5 +68,10 @@ public class StudentAccessService {
         log.info("Student {} exit registered at {}", studentId, LocalDateTime.now());
         StudentAccess savedAccess = accessRepository.save(access);
         return modelMapper.map(savedAccess, StudentAccessDTO.class);
+    }
+
+    public Page<StudentAccessDTO> findAll(Pageable pageable) {
+        Page<StudentAccess> studentAccessPage = accessRepository.findAll(pageable);
+        return studentAccessPage.map(access -> modelMapper.map(access, StudentAccessDTO.class));
     }
 }
